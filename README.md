@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Absensi Seminar - Fakultas Kedokteran Universitas Riau
 
 Sistem absensi seminar berbasis QR code untuk Fakultas Kedokteran Universitas Riau.
@@ -80,3 +81,6 @@ Sistem absensi seminar berbasis QR code untuk Fakultas Kedokteran Universitas Ri
 ---
 
 © Fakultas Kedokteran Universitas Riau
+=======
+# Repo-github
+>>>>>>> d26032ab4cf14c822535d37ab603e28fd73602c6
