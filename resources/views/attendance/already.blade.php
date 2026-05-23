@@ -20,6 +20,12 @@
         <p>Event: {{ $event->title }}</p>
         <p class="name">{{ $registration->full_name }}</p>
         <span class="badge">Peserta ini sudah melakukan absensi.</span>
+        <p style="margin-top: 1.25rem;">
+            <a href="{{ route('certificates.by-token', $registration->attendance_token) }}"
+                style="display: inline-block; padding: 0.65rem 1.25rem; background: #fff; color: #5b21b6; border-radius: 0.5rem; font-weight: 600; text-decoration: none;">
+                Unduh Sertifikat (PDF)
+            </a>
+        </p>
     </div>
 </body>
 </html>

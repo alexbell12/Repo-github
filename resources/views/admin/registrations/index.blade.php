@@ -45,6 +45,7 @@
                     <th class="pb-3 font-semibold">Email</th>
                     <th class="pb-3 font-semibold">Terdaftar</th>
                     <th class="pb-3 font-semibold">Status</th>
+                    <th class="pb-3 font-semibold">Kehadiran</th>
                     <th class="pb-3 font-semibold">Aksi</th>
                 </tr>
             </thead>
@@ -64,7 +65,22 @@
                                 </span>
                             @endif
                         </td>
-                        <td class="py-3 flex gap-2">
+                        <td class="py-3">
+                            @if($r->hasAttended())
+                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-blue-500/30 text-blue-100 text-xs">
+                                    Hadir {{ $r->attendance->scanned_at->format('d/m H:i') }}
+                                </span>
+                            @else
+                                <span class="text-white/50 text-xs">Belum hadir</span>
+                            @endif
+                        </td>
+                        <td class="py-3 flex flex-wrap gap-2">
+                            @if($r->hasAttended())
+                                <a href="{{ route('admin.registrations.certificate', $r) }}"
+                                    class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-500/60 hover:bg-indigo-500 text-sm">
+                                    Sertifikat
+                                </a>
+                            @endif
                             @if($r->status !== 'verified')
                                 <form action="{{ route('admin.registrations.verify', $r) }}" method="POST" class="inline">
                                     @csrf
@@ -79,7 +95,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="py-8 text-center text-white/70">Belum ada peserta terdaftar.</td></tr>
+                    <tr><td colspan="6" class="py-8 text-center text-white/70">Belum ada peserta terdaftar.</td></tr>
                 @endforelse
             </tbody>
         </table>

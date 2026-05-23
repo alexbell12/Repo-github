@@ -12,7 +12,7 @@ class RegistrationController extends Controller
 {
     public function index(Event $event)
     {
-        $registrations = $event->registrations()->with('user')->orderBy('created_at', 'desc')->get();
+        $registrations = $event->registrations()->with(['user', 'attendance'])->orderBy('created_at', 'desc')->get();
         return view('admin.registrations.index', compact('event', 'registrations'));
     }
 

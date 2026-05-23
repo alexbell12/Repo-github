@@ -22,7 +22,10 @@ class EventController extends Controller
         $event = Event::where('slug', $slug)->where('is_active', true)->firstOrFail();
         $userRegistration = null;
         if (auth()->check()) {
-            $userRegistration = $event->registrations()->where('user_id', auth()->id())->first();
+            $userRegistration = $event->registrations()
+                ->with('attendance')
+                ->where('user_id', auth()->id())
+                ->first();
         }
         return view('events.show', compact('event', 'userRegistration'));
     }
@@ -66,6 +69,7 @@ class EventController extends Controller
     {
         $event = Event::where('slug', $slug)->where('is_active', true)->firstOrFail();
         $registration = $event->registrations()
+            ->with('attendance')
             ->where('user_id', auth()->id())
             ->firstOrFail();
 

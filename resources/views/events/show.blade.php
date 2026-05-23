@@ -54,13 +54,19 @@
 
     <div class="mt-8 flex flex-wrap gap-3">
         @auth
-            @php $reg = $userRegistration ?? $event->registrations()->where('user_id', auth()->id())->first(); @endphp
+            @php $reg = $userRegistration ?? $event->registrations()->with('attendance')->where('user_id', auth()->id())->first(); @endphp
             @if($reg)
                 @if($reg->isVerified())
                     <a href="{{ route('events.my-attendance', $event->slug) }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/20 hover:bg-white/30 font-medium">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
                         QR Absensi Saya
                     </a>
+                    @if($reg->hasAttended())
+                        <a href="{{ route('events.certificate', $event->slug) }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white text-purple-700 font-semibold hover:bg-white/90">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Unduh Sertifikat
+                        </a>
+                    @endif
                 @else
                     <span class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500/20 text-amber-100 text-sm">Menunggu verifikasi admin</span>
                 @endif

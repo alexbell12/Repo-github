@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,7 @@ Route::post('/events/{slug}/register', [EventController::class, 'register'])->na
 
 Route::get('/attend/{token}', [EventController::class, 'scan'])->name('attendance.scan');
 Route::post('/attend/confirm', [EventController::class, 'confirmScan'])->name('attendance.confirm');
+Route::get('/certificates/attend/{token}', [CertificateController::class, 'downloadByToken'])->name('certificates.by-token');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -26,6 +28,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/events/{slug}/my-attendance', [EventController::class, 'showMyAttendance'])->name('events.my-attendance');
+    Route::get('/events/{slug}/certificate', [CertificateController::class, 'download'])->name('events.certificate');
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -42,4 +45,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/events/{event}/registrations', [AdminRegistrationController::class, 'store'])->name('events.registrations.store');
     Route::post('/registrations/{registration}/verify', [AdminRegistrationController::class, 'verify'])->name('registrations.verify');
     Route::delete('/registrations/{registration}', [AdminRegistrationController::class, 'destroy'])->name('registrations.destroy');
+    Route::get('/registrations/{registration}/certificate', [CertificateController::class, 'adminDownload'])->name('registrations.certificate');
 });
