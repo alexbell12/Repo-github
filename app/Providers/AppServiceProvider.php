@@ -12,7 +12,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if ((env('MYSQL_URL') || env('MYSQLHOST')) && env('DB_CONNECTION', 'sqlite') === 'sqlite') {
+            putenv('DB_CONNECTION=mysql');
+            $_ENV['DB_CONNECTION'] = 'mysql';
+            $_SERVER['DB_CONNECTION'] = 'mysql';
+        }
     }
 
     /**
@@ -22,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
+            config(['session.secure' => true]);
         }
     }
 }

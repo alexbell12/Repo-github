@@ -6,16 +6,17 @@
     <title>@yield('title', 'Absensi Seminar') - Fakultas Kedokteran Universitas Riau</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700" rel="stylesheet" />
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+    @if (file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
+        {{-- Production/Railway: pakai CDN agar Tailwind sama seperti `php artisan serve` lokal --}}
         <script src="https://cdn.tailwindcss.com"></script>
     @endif
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .bg-gradient-absensi { background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 30%, #6366f1 70%, #4338ca 100%); min-height: 100vh; }
         .card-glass { background: rgba(255,255,255,0.12); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); }
-        .btn-primary { @apply px-4 py-2 rounded-lg font-medium transition; background: rgba(255,255,255,0.2); color: #fff; }
+        .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: background 0.2s; background: rgba(255,255,255,0.2); color: #fff; text-decoration: none; }
         .btn-primary:hover { background: rgba(255,255,255,0.3); }
     </style>
 </head>
