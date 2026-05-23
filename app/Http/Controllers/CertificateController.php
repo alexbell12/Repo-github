@@ -57,6 +57,8 @@ class CertificateController extends Controller
 
         $filename = 'Sertifikat-'.Str::slug($registration->full_name).'.pdf';
 
+        app()->setLocale('id');
+
         return Pdf::loadView('certificates.pdf', [
             'registration' => $registration,
             'event' => $registration->event,

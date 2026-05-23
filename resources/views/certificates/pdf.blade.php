@@ -1,130 +1,123 @@
+@php
+    $eventDate = $event->start_time->copy()->locale('id')->translatedFormat('d F Y');
+    $attendDate = $attendedAt->copy()->locale('id')->translatedFormat('d F Y, H:i');
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <title>Sertifikat - {{ $registration->full_name }}</title>
     <style>
-        @page { margin: 0; }
-        * { box-sizing: border-box; }
+        @page { size: A4 landscape; margin: 12mm; }
         body {
             margin: 0;
             padding: 0;
             font-family: DejaVu Sans, sans-serif;
             color: #1e1b4b;
-            background: #f5f3ff;
         }
-        .page {
+        table { border-collapse: collapse; }
+        .cert-wrap {
             width: 100%;
-            height: 100%;
-            padding: 28px 36px;
-            position: relative;
-        }
-        .border-outer {
-            border: 6px double #4c1d95;
-            padding: 6px;
-            height: 520px;
-        }
-        .border-inner {
-            border: 2px solid #6366f1;
-            height: 100%;
-            padding: 28px 32px;
-            text-align: center;
+            border: 4px double #4c1d95;
             background: #ffffff;
         }
+        .cert-inner {
+            border: 2px solid #6366f1;
+            padding: 24px 28px;
+            text-align: center;
+        }
         .logo-line {
-            font-size: 11px;
-            letter-spacing: 2px;
+            font-size: 10px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             color: #5b21b6;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         h1 {
-            font-size: 32px;
-            margin: 0 0 6px;
+            font-size: 30px;
+            margin: 0 0 4px;
             color: #4c1d95;
-            letter-spacing: 1px;
         }
         .subtitle {
-            font-size: 13px;
+            font-size: 12px;
             color: #6b7280;
-            margin-bottom: 24px;
+            margin-bottom: 18px;
         }
         .presented {
-            font-size: 12px;
+            font-size: 11px;
             color: #4b5563;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .name {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: bold;
             color: #312e81;
-            margin: 8px 0 16px;
+            margin: 6px 0 14px;
+            padding-bottom: 8px;
             border-bottom: 2px solid #c4b5fd;
-            display: inline-block;
-            padding: 0 24px 8px;
-            min-width: 360px;
         }
         .body-text {
-            font-size: 13px;
-            line-height: 1.7;
+            font-size: 12px;
+            line-height: 1.6;
             color: #374151;
-            max-width: 620px;
-            margin: 0 auto 20px;
+            margin: 0 auto 16px;
+            max-width: 90%;
         }
         .event-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             color: #4c1d95;
         }
         .meta-table {
             width: 100%;
-            margin-top: 24px;
-            font-size: 11px;
-            color: #6b7280;
+            margin-top: 16px;
+            font-size: 10px;
+            color: #4b5563;
         }
         .meta-table td {
-            width: 33.33%;
+            width: 33%;
+            text-align: center;
             vertical-align: top;
-            padding: 0 8px;
+            padding: 8px 6px 0;
         }
         .meta-label {
             font-weight: bold;
             color: #4c1d95;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             display: block;
             margin-bottom: 4px;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        }
+        .seal-cell {
+            width: 90px;
+            vertical-align: bottom;
+            text-align: center;
         }
         .seal {
-            position: absolute;
-            bottom: 52px;
-            right: 72px;
-            width: 88px;
-            height: 88px;
+            display: inline-block;
+            width: 76px;
+            height: 76px;
             border: 3px solid #7c3aed;
-            border-radius: 50%;
-            text-align: center;
+            border-radius: 38px;
             font-size: 9px;
             color: #6d28d9;
-            padding-top: 28px;
-            line-height: 1.3;
             font-weight: bold;
-            opacity: 0.85;
+            line-height: 1.25;
+            padding-top: 26px;
         }
-        .cert-no {
-            position: absolute;
-            bottom: 36px;
-            left: 72px;
-            font-size: 9px;
+        .footer-row td {
+            font-size: 8px;
             color: #9ca3af;
+            padding-top: 12px;
+            text-align: left;
         }
     </style>
 </head>
 <body>
-    <div class="page">
-        <div class="border-outer">
-            <div class="border-inner">
+    <table class="cert-wrap" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="cert-inner">
                 <div class="logo-line">Fakultas Kedokteran — Universitas Riau</div>
                 <h1>SERTIFIKAT</h1>
                 <div class="subtitle">Kehadiran Seminar / Event</div>
@@ -133,18 +126,18 @@
                 <div class="name">{{ $registration->full_name }}</div>
 
                 <p class="body-text">
-                    Atas partisipasi dan kehadiran pada kegiatan<br>
+                    Atas partisipasi dan kehadiran pada kegiatan
                     <span class="event-title">{{ $event->title }}</span>
                     @if($event->location)
-                        <br>yang diselenggarakan di <strong>{{ $event->location }}</strong>
+                        yang diselenggarakan di <strong>{{ $event->location }}</strong>
                     @endif
                 </p>
 
-                <table class="meta-table">
+                <table class="meta-table" width="100%">
                     <tr>
                         <td>
                             <span class="meta-label">Tanggal Event</span>
-                            {{ $event->start_time->translatedFormat('d F Y') }}
+                            {{ $eventDate }}
                         </td>
                         <td>
                             <span class="meta-label">Waktu</span>
@@ -152,17 +145,19 @@
                         </td>
                         <td>
                             <span class="meta-label">Tercatat Hadir</span>
-                            {{ $attendedAt->translatedFormat('d F Y, H:i') }} WIB
+                            {{ $attendDate }} WIB
                         </td>
                     </tr>
                     @if($registration->nim || $registration->instansi)
                     <tr>
-                        <td colspan="3" style="padding-top: 12px;">
+                        <td colspan="3" style="padding-top: 10px;">
                             @if($registration->nim)
                                 <span class="meta-label">NIM / ID</span>{{ $registration->nim }}
                             @endif
+                            @if($registration->nim && $registration->instansi)
+                                &nbsp;&nbsp;|&nbsp;&nbsp;
+                            @endif
                             @if($registration->instansi)
-                                @if($registration->nim) &nbsp;|&nbsp; @endif
                                 <span class="meta-label">Instansi</span>{{ $registration->instansi }}
                             @endif
                         </td>
@@ -170,14 +165,18 @@
                     @endif
                 </table>
 
-                <div class="seal">
-                    TELAH<br>HADIR
-                </div>
-            </div>
-        </div>
-        <div class="cert-no">
-            No. Sertifikat: {{ strtoupper(\Illuminate\Support\Str::substr($registration->attendance_token, 0, 12)) }}
-        </div>
-    </div>
+                <table width="100%" style="margin-top: 8px;">
+                    <tr>
+                        <td class="footer-row" style="text-align: left; width: 70%;">
+                            No. Sertifikat: {{ strtoupper(\Illuminate\Support\Str::substr($registration->attendance_token, 0, 12)) }}
+                        </td>
+                        <td class="seal-cell">
+                            <div class="seal">TELAH<br>HADIR</div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
