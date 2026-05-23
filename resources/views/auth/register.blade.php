@@ -41,6 +41,12 @@
         <p class="mt-4 text-center text-sm text-white/80">
             Sudah punya akun? <a href="{{ route('login') }}" class="underline font-medium text-white">Login di sini</a>
         </p>
+
+        <div class="mt-6 pt-4 border-t border-white/20 text-sm text-white/70">
+            <p class="font-medium text-white/90 mb-2">Atau pakai akun demo</p>
+            <p>User: <span class="font-mono text-white/90">user@example.com</span> / password</p>
+            <p class="mt-1">Admin: <span class="font-mono text-white/90">admin@example.com</span> / password</p>
+        </div>
     </div>
 </div>
 @endsection

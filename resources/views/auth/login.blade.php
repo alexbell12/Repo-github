@@ -49,10 +49,19 @@
             Belum punya akun? <a href="{{ route('register') }}" class="underline font-medium text-white hover:no-underline">Daftar di sini</a>
         </p>
 
-        <div class="mt-6 pt-4 border-t border-white/20 text-sm text-white/70">
-            <p class="font-medium text-white/90">Akun Test:</p>
-            <p>User: user@example.com / password</p>
-            <p>Admin: admin@example.com / password</p>
+        <div class="mt-6 pt-4 border-t border-white/20 text-sm text-white/70 space-y-3">
+            <p class="font-medium text-white/90">Akun bawaan (password: <span class="font-mono text-white">password</span>)</p>
+            <div class="grid gap-2">
+                <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+                    <p class="text-white/90 font-medium">Admin — kelola event & QR</p>
+                    <p class="font-mono text-xs mt-1 text-white/80">admin@example.com</p>
+                </div>
+                <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+                    <p class="text-white/90 font-medium">User — daftar & absensi seminar</p>
+                    <p class="font-mono text-xs mt-1 text-white/80">user@example.com</p>
+                </div>
+            </div>
+            <p class="text-xs text-white/60">Reset akun: <span class="font-mono">php artisan users:ensure-defaults</span></p>
         </div>
     </div>
 </div>
