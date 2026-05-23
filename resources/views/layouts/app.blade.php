@@ -2,17 +2,32 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>@yield('title', 'Absensi Seminar') - Fakultas Kedokteran Universitas Riau</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700" rel="stylesheet" />
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+    
+    @if (file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
         <script src="https://cdn.tailwindcss.com"></script>
     @endif
+    
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        /* SVG sizing constraints */
+        svg { max-width: 100%; height: auto; }
+        .w-4 { width: 1rem !important; }
+        .h-4 { height: 1rem !important; }
+        .w-6 { width: 1.5rem !important; }
+        .h-6 { height: 1.5rem !important; }
+        
+        /* Image constraints */
+        img { max-width: 100%; height: auto; }
+        
         .bg-gradient-absensi { background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 30%, #6366f1 70%, #4338ca 100%); min-height: 100vh; }
         .card-glass { background: rgba(255,255,255,0.12); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); }
         .btn-primary { @apply px-4 py-2 rounded-lg font-medium transition; background: rgba(255,255,255,0.2); color: #fff; }
@@ -54,7 +69,6 @@
                         Login Admin
                     </a>
                     <a href="{{ route('register') }}" class="btn-primary inline-flex items-center gap-2 text-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
                         Daftar
                     </a>
                 @endauth
@@ -63,27 +77,13 @@
     </nav>
 
     <main class="max-w-6xl mx-auto px-4 py-8">
-        @if(session('success'))
-            <div class="mb-4 p-4 rounded-lg bg-green-500/20 border border-green-400/50 text-green-100">{{ session('success') }}</div>
-        @endif
-        @if(session('error'))
-            <div class="mb-4 p-4 rounded-lg bg-red-500/20 border border-red-400/50 text-red-100">{{ session('error') }}</div>
-        @endif
-        @if(session('info'))
-            <div class="mb-4 p-4 rounded-lg bg-blue-500/20 border border-blue-400/50 text-blue-100">{{ session('info') }}</div>
-        @endif
-        @if($errors->any())
-            <div class="mb-4 p-4 rounded-lg bg-red-500/20 border border-red-400/50">
-                <ul class="list-disc list-inside text-red-100 text-sm">
-                    @foreach($errors->all() as $err) <li>{{ $err }}</li> @endforeach
-                </ul>
-            </div>
-        @endif
         @yield('content')
     </main>
 
-    <footer class="border-t border-white/10 py-4 text-center text-sm text-white/70">
-        © {{ date('Y') }} Absensi Seminar - Fakultas Kedokteran Universitas Riau. All rights reserved.
+    <footer class="border-t border-white/10 bg-black/10 mt-12">
+        <div class="max-w-6xl mx-auto px-4 py-6 text-center text-sm opacity-75">
+            <p>&copy; 2024 Absensi Seminar - Fakultas Kedokteran Universitas Riau</p>
+        </div>
     </footer>
 </body>
 </html>
