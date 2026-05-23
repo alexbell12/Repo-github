@@ -15,6 +15,17 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { font-size: 16px; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        /* SVG sizing constraints */
+        svg { max-width: 100%; height: auto; }
+        .w-4 { width: 1rem !important; }
+        .h-4 { height: 1rem !important; }
+        .w-6 { width: 1.5rem !important; }
+        .h-6 { height: 1.5rem !important; }
+        
+        /* Image constraints */
+        img { max-width: 100%; height: auto; }
+        
         .bg-gradient-absensi { background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 30%, #6366f1 70%, #4338ca 100%); min-height: 100vh; }
         .card-glass { background: rgba(255,255,255,0.12); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); }
         .btn-primary { @apply px-4 py-2 rounded-lg font-medium transition; background: rgba(255,255,255,0.2); color: #fff; }
