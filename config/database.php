@@ -16,11 +16,19 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION') ?: (
-        env('DB_URL') || env('MYSQL_URL') || env('MYSQLHOST') || env('MYSQL_HOST')
-            ? 'mysql'
-            : 'sqlite'
-    ),
+    'default' => (static function (): string {
+        $mysqlConfigured = env('DB_URL')
+            || env('MYSQL_URL')
+            || env('MYSQLHOST')
+            || env('MYSQL_HOST')
+            || env('DB_HOST');
+
+        if ($mysqlConfigured) {
+            return 'mysql';
+        }
+
+        return env('DB_CONNECTION', 'sqlite');
+    })(),
 
     /*
     |--------------------------------------------------------------------------
