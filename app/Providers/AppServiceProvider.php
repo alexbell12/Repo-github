@@ -12,7 +12,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (env('MYSQL_URL') || env('MYSQLHOST') || env('MYSQL_HOST') || env('DB_URL')) {
+        if (
+            env('RAILWAY_SERVICE_ID')
+            || env('MYSQL_URL')
+            || env('MYSQLHOST')
+            || env('MYSQL_HOST')
+            || env('DB_URL')
+        ) {
             config(['database.default' => 'mysql']);
         }
 

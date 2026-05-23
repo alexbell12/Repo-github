@@ -17,7 +17,12 @@ return [
     */
 
     'default' => (static function (): string {
-        $mysqlConfigured = env('DB_URL')
+        $onRailway = env('RAILWAY_SERVICE_ID')
+            || env('RAILWAY_ENVIRONMENT_NAME')
+            || env('RAILWAY_PUBLIC_DOMAIN');
+
+        $mysqlConfigured = $onRailway
+            || env('DB_URL')
             || env('MYSQL_URL')
             || env('MYSQLHOST')
             || env('MYSQL_HOST')
