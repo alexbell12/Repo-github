@@ -16,7 +16,10 @@
             class="form-input" placeholder="nama@email.com">
     </div>
     <div>
-        <label class="block text-sm font-medium mb-1.5 text-gray-700">Password</label>
+        <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-sm font-medium text-gray-700">Password</label>
+            <a href="{{ route('password.request') }}" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Lupa password?</a>
+        </div>
         <div class="relative">
             <input id="login-password" type="password" name="password" required placeholder="••••••••"
                 autocomplete="current-password" class="form-input pr-12">
