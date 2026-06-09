@@ -21,7 +21,7 @@ Sistem absensi seminar berbasis QR code untuk Fakultas Kedokteran Universitas Ri
 
 1. **Clone / masuk ke folder project**
    ```bash
-   cd c:\laragon\www\absensi-qrcode
+   cd c:\laragon\www\presensi
    ```
 
 2. **Install dependency PHP**
