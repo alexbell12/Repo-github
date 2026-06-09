@@ -17,6 +17,9 @@ class Event extends Model
         'start_time',
         'end_time',
         'location',
+        'latitude',
+        'longitude',
+        'location_radius',
         'is_active',
     ];
 
@@ -25,6 +28,9 @@ class Event extends Model
         return [
             'start_time' => 'datetime',
             'end_time' => 'datetime',
+            'latitude' => 'float',
+            'longitude' => 'float',
+            'location_radius' => 'integer',
             'is_active' => 'boolean',
         ];
     }

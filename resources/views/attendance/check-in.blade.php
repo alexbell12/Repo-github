@@ -1,31 +1,28 @@
 @extends('layouts.app')
 
-@section('title', 'Konfirmasi Presensi')
+@section('title', 'Presensi - ' . $event->title)
 
 @section('content')
 <div class="max-w-md mx-auto">
     <div class="card-glass rounded-2xl p-8">
-        <h1 class="text-2xl font-bold mb-2 text-gray-900">Konfirmasi Presensi</h1>
-        <p class="text-gray-600 text-sm">Event: {{ $event->title }}</p>
-        <p class="text-xl font-semibold my-4 text-gray-900">{{ $registration->full_name }}</p>
-        <p class="text-gray-600 mb-4">Catat kehadiran peserta ini?</p>
+        <h1 class="text-2xl font-bold mb-2 text-gray-900">Presensi Event</h1>
+        <p class="text-gray-600 text-sm mb-1">{{ $event->title }}</p>
+        <p class="text-gray-800 font-medium mb-4">{{ $registration->full_name }}</p>
 
         <div id="geo-status" class="mb-4 p-3 rounded-lg bg-gray-50 border border-gray-200 text-sm text-gray-600">
             Mengambil lokasi perangkat...
         </div>
 
-        <form method="POST" action="{{ route('attendance.confirm') }}" id="confirm-form">
+        <form method="POST" action="{{ route('events.check-in.submit', $event->slug) }}" id="checkin-form">
             @csrf
-            <input type="hidden" name="token" value="{{ $registration->attendance_token }}">
             <input type="hidden" name="sig" value="{{ $request->sig }}">
             <input type="hidden" name="slot" value="{{ $request->slot }}">
             <input type="hidden" name="latitude" id="latitude">
             <input type="hidden" name="longitude" id="longitude">
-            <button type="submit" id="submit-btn" disabled class="w-full py-3 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed">
-                Ya, Catat Hadir
+            <button type="submit" id="submit-btn" disabled class="w-full py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                Catat Presensi Saya
             </button>
         </form>
-        <a href="javascript:history.back()" class="block text-center mt-3 text-sm text-gray-500 hover:text-gray-700">Batal</a>
     </div>
 </div>
 

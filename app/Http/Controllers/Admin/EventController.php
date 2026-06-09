@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Services\AttendanceQrService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class EventController extends Controller
 {
+    public function __construct(private AttendanceQrService $qrService) {}
+
     public function index()
     {
         $events = Event::orderBy('start_time', 'desc')->get();
@@ -31,11 +35,15 @@ class EventController extends Controller
             'start_time' => ['required', 'date'],
             'end_time' => ['required', 'date', 'after:start_time'],
             'location' => ['nullable', 'string', 'max:255'],
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
+            'location_radius' => ['nullable', 'integer', 'min:10', 'max:5000'],
             'is_active' => ['boolean'],
         ]);
 
         $validated['is_active'] = $request->boolean('is_active');
         $validated['slug'] = Str::slug($validated['title']) . '-' . strtolower(Str::random(6));
+        $validated['location_radius'] = $validated['location_radius'] ?? 100;
 
         Event::create($validated);
 
@@ -60,12 +68,16 @@ class EventController extends Controller
             'start_time' => ['required', 'date'],
             'end_time' => ['required', 'date', 'after:start_time'],
             'location' => ['nullable', 'string', 'max:255'],
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
+            'location_radius' => ['nullable', 'integer', 'min:10', 'max:5000'],
             'is_active' => ['boolean'],
         ]);
 
         $event->update([
             ...$validated,
             'is_active' => $request->boolean('is_active'),
+            'location_radius' => $validated['location_radius'] ?? $event->location_radius ?? 100,
         ]);
 
         return redirect()->route('admin.events.index')->with('success', 'Event berhasil diperbarui.');
@@ -85,7 +97,20 @@ class EventController extends Controller
 
     public function qr(Event $event)
     {
-        $eventUrl = route('events.show', $event->slug);
-        return view('admin.events.qr', compact('event', 'eventUrl'));
+        $qrUrl = $this->qrService->buildEventCheckInUrl($event);
+        $expiresIn = $this->qrService->secondsUntilNextSlot();
+
+        return view('admin.events.qr', compact('event', 'qrUrl', 'expiresIn'));
+    }
+
+    public function qrRefresh(Event $event)
+    {
+        $qrUrl = $this->qrService->buildEventCheckInUrl($event);
+
+        return response()->json([
+            'url' => $qrUrl,
+            'svg' => (string) QrCode::format('svg')->size(220)->generate($qrUrl),
+            'expires_in' => $this->qrService->secondsUntilNextSlot(),
+        ]);
     }
 }

@@ -16,6 +16,7 @@ Route::post('/events/{slug}/register', [EventController::class, 'register'])->na
 
 Route::get('/attend/{token}', [EventController::class, 'scan'])->name('attendance.scan');
 Route::post('/attend/confirm', [EventController::class, 'confirmScan'])->name('attendance.confirm');
+Route::get('/events/{slug}/check-in', [EventController::class, 'checkInForm'])->name('events.check-in');
 Route::get('/certificates/attend/{token}', [CertificateController::class, 'downloadByToken'])->name('certificates.by-token');
 
 Route::middleware('guest')->group(function () {
@@ -28,6 +29,8 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/events/{slug}/my-attendance', [EventController::class, 'showMyAttendance'])->name('events.my-attendance');
+    Route::get('/events/{slug}/qr-refresh', [EventController::class, 'attendanceQrRefresh'])->name('events.qr-refresh');
+    Route::post('/events/{slug}/check-in', [EventController::class, 'checkInSubmit'])->name('events.check-in.submit');
     Route::get('/events/{slug}/certificate', [CertificateController::class, 'download'])->name('events.certificate');
 });
 
@@ -40,6 +43,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/events/{event}', [AdminEventController::class, 'destroy'])->name('events.destroy');
     Route::post('/events/{event}/toggle', [AdminEventController::class, 'toggleActive'])->name('events.toggle');
     Route::get('/events/{event}/qr', [AdminEventController::class, 'qr'])->name('events.qr');
+    Route::get('/events/{event}/qr-refresh', [AdminEventController::class, 'qrRefresh'])->name('events.qr-refresh');
 
     Route::get('/events/{event}/registrations', [AdminRegistrationController::class, 'index'])->name('events.registrations.index');
     Route::post('/events/{event}/registrations', [AdminRegistrationController::class, 'store'])->name('events.registrations.store');
