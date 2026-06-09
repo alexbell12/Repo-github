@@ -44,7 +44,6 @@
                     <th class="pb-3 font-semibold text-gray-700">Nama</th>
                     <th class="pb-3 font-semibold text-gray-700">Email</th>
                     <th class="pb-3 font-semibold text-gray-700">Terdaftar</th>
-                    <th class="pb-3 font-semibold text-gray-700">Status</th>
                     <th class="pb-3 font-semibold text-gray-700">Kehadiran</th>
                     <th class="pb-3 font-semibold text-gray-700">Aksi</th>
                 </tr>
@@ -56,13 +55,6 @@
                         <td class="py-3 text-gray-600">{{ $r->email ?? '-' }}</td>
                         <td class="py-3 text-gray-600">{{ $r->created_at->format('d M Y H:i') }}</td>
                         <td class="py-3">
-                            @if($r->status === 'verified')
-                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs">Terverifikasi</span>
-                            @else
-                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-100 text-amber-800 text-xs">Menunggu</span>
-                            @endif
-                        </td>
-                        <td class="py-3">
                             @if($r->hasAttended())
                                 <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-xs">
                                     Hadir {{ $r->attendance->scanned_at->format('d/m H:i') }}
@@ -72,14 +64,12 @@
                             @endif
                         </td>
                         <td class="py-3 flex flex-wrap gap-2">
-                            @if($r->hasAttended())
+                            @if($event->hasEnded() && $r->hasAttended())
                                 <a href="{{ route('admin.registrations.certificate', $r) }}" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm">Sertifikat</a>
-                            @endif
-                            @if($r->status !== 'verified')
-                                <form action="{{ route('admin.registrations.verify', $r) }}" method="POST" class="inline">
-                                    @csrf
-                                    <button type="submit" class="px-3 py-1.5 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm">Verifikasi</button>
-                                </form>
+                            @elseif($event->hasEnded() && !$r->hasAttended())
+                                <span class="text-xs text-gray-400">Belum presensi</span>
+                            @else
+                                <span class="text-xs text-gray-400">QR aktif setelah event selesai</span>
                             @endif
                             <form action="{{ route('admin.registrations.destroy', $r) }}" method="POST" class="inline" onsubmit="return confirm('Hapus peserta ini?');">
                                 @csrf
@@ -89,7 +79,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="py-8 text-center text-gray-500">Belum ada peserta terdaftar.</td></tr>
+                    <tr><td colspan="5" class="py-8 text-center text-gray-500">Belum ada peserta terdaftar.</td></tr>
                 @endforelse
             </tbody>
         </table>

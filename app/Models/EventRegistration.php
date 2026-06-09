@@ -28,6 +28,9 @@ class EventRegistration extends Model
             if (empty($reg->attendance_token)) {
                 $reg->attendance_token = Str::random(64);
             }
+            if (empty($reg->status)) {
+                $reg->status = 'verified';
+            }
         });
     }
 

@@ -78,4 +78,14 @@ class Event extends Model
         }
         return 'Berlangsung';
     }
+
+    public function hasEnded(): bool
+    {
+        return now()->gt($this->end_time);
+    }
+
+    public function canShowAttendanceQr(): bool
+    {
+        return $this->hasEnded();
+    }
 }

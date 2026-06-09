@@ -49,14 +49,25 @@
 
     <div class="mt-6 p-4 rounded-xl bg-blue-50 border border-blue-100 flex items-start gap-3">
         <svg class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-        <p class="text-sm text-blue-800">Info: Event {{ strtolower($event->status_label) }}. Presensi hanya dapat dilakukan di lokasi acara.</p>
+        <p class="text-sm text-blue-800">
+            @if($event->hasEnded())
+                Event sudah selesai. Peserta terdaftar dapat menampilkan QR presensi kepada panitia untuk pencatatan kehadiran.
+            @else
+                Setelah event selesai ({{ $event->end_time->format('d M Y, H:i') }}), QR presensi akan tersedia untuk ditunjukkan kepada panitia.
+            @endif
+        </p>
     </div>
 
     <div class="mt-8 flex flex-wrap gap-3">
         @auth
             @php $reg = $userRegistration ?? $event->registrations()->with('attendance')->where('user_id', auth()->id())->first(); @endphp
             @if($reg)
-                @if($reg->isVerified())
+                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-green-50 border border-green-200 text-green-800 text-sm font-medium">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    Anda terdaftar
+                </span>
+
+                @if($event->canShowAttendanceQr())
                     <a href="{{ route('events.my-attendance', $event->slug) }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
                         QR Presensi Saya
@@ -68,7 +79,9 @@
                         </a>
                     @endif
                 @else
-                    <span class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-sm">Menunggu verifikasi admin</span>
+                    <span class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-sm">
+                        QR presensi tersedia setelah event selesai
+                    </span>
                 @endif
             @else
                 <a href="{{ route('events.register.form', $event->slug) }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700">

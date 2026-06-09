@@ -67,10 +67,12 @@ class EventController extends Controller
             return back()->with('error', 'Anda sudah terdaftar di event ini.');
         }
 
+        $validated['status'] = 'verified';
+
         EventRegistration::create($validated);
 
         return redirect()->route('events.show', $event->slug)
-            ->with('success', 'Pendaftaran berhasil. Menunggu verifikasi admin.');
+            ->with('success', 'Pendaftaran berhasil. Anda sudah terdaftar di event ini.');
     }
 
     public function showMyAttendance(string $slug)
@@ -81,15 +83,26 @@ class EventController extends Controller
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
-        $qrUrl = $this->qrService->buildAttendanceUrl($registration);
-        $expiresIn = $this->qrService->secondsUntilNextSlot();
+        $qrAvailable = $event->canShowAttendanceQr();
+        $qrUrl = null;
+        $expiresIn = 0;
 
-        return view('events.my-attendance', compact('event', 'registration', 'qrUrl', 'expiresIn'));
+        if ($qrAvailable) {
+            $qrUrl = $this->qrService->buildAttendanceUrl($registration);
+            $expiresIn = $this->qrService->secondsUntilNextSlot();
+        }
+
+        return view('events.my-attendance', compact('event', 'registration', 'qrUrl', 'expiresIn', 'qrAvailable'));
     }
 
     public function attendanceQrRefresh(string $slug)
     {
         $event = Event::where('slug', $slug)->where('is_active', true)->firstOrFail();
+
+        if (!$event->canShowAttendanceQr()) {
+            return response()->json(['error' => 'QR presensi belum tersedia.'], 403);
+        }
+
         $registration = $event->registrations()
             ->where('user_id', auth()->id())
             ->firstOrFail();
@@ -133,9 +146,9 @@ class EventController extends Controller
                 ->with('error', 'Anda belum terdaftar di event ini.');
         }
 
-        if (!$registration->isVerified()) {
+        if (!$event->canShowAttendanceQr()) {
             return redirect()->route('events.show', $event->slug)
-                ->with('error', 'Pendaftaran Anda belum diverifikasi admin.');
+                ->with('info', 'Presensi QR akan tersedia setelah event selesai.');
         }
 
         if ($registration->attendance) {
@@ -159,6 +172,10 @@ class EventController extends Controller
         $payload = 'event:' . $event->id;
         if (!$this->qrService->validateSignature($payload, $request->sig)) {
             return back()->with('error', 'QR code sudah tidak berlaku. Silakan scan QR terbaru.');
+        }
+
+        if (!$event->canShowAttendanceQr()) {
+            return back()->with('error', 'Presensi hanya dapat dilakukan setelah event selesai.');
         }
 
         if (!$this->geoService->isWithinRadius($event, (float) $request->latitude, (float) $request->longitude)) {
@@ -188,6 +205,11 @@ class EventController extends Controller
         $registration = EventRegistration::where('attendance_token', $token)->firstOrFail();
         $event = $registration->event;
 
+        if (!$event->canShowAttendanceQr()) {
+            return redirect()->route('events.show', $event->slug)
+                ->with('error', 'Presensi belum dibuka. QR peserta hanya aktif setelah event selesai.');
+        }
+
         if (!$request->has('sig') || !$this->qrService->validateSignature($token, $request->sig)) {
             return redirect()->route('events.show', $event->slug)
                 ->with('error', 'QR code tidak valid atau sudah kadaluarsa. Minta peserta menampilkan QR terbaru.');
@@ -211,6 +233,10 @@ class EventController extends Controller
 
         $registration = EventRegistration::where('attendance_token', $request->token)->firstOrFail();
         $event = $registration->event;
+
+        if (!$event->canShowAttendanceQr()) {
+            return back()->with('error', 'Presensi hanya dapat dicatat setelah event selesai.');
+        }
 
         if (!$this->qrService->validateSignature($request->token, $request->sig)) {
             return back()->with('error', 'QR code sudah tidak berlaku. Minta peserta menampilkan QR terbaru.');

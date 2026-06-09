@@ -23,7 +23,8 @@ class CertificateController extends Controller
             ->with(['event', 'attendance'])
             ->firstOrFail();
 
-        abort_unless($registration->hasAttended(), 403, 'Sertifikat hanya tersedia setelah absensi tercatat.');
+        abort_unless($registration->event->hasEnded(), 403, 'Sertifikat tersedia setelah event selesai.');
+        abort_unless($registration->hasAttended(), 403, 'Sertifikat hanya tersedia setelah presensi tercatat.');
 
         return $this->pdfResponse($registration);
     }
@@ -32,6 +33,7 @@ class CertificateController extends Controller
     {
         $registration->load(['event', 'attendance']);
 
+        abort_unless($registration->event->hasEnded(), 403, 'Sertifikat tersedia setelah event selesai.');
         abort_unless($registration->hasAttended(), 403, 'Peserta belum hadir.');
 
         return $this->pdfResponse($registration);
@@ -46,7 +48,8 @@ class CertificateController extends Controller
             ->with(['event', 'attendance'])
             ->firstOrFail();
 
-        abort_unless($registration->hasAttended(), 403, 'Sertifikat hanya tersedia setelah Anda tercatat hadir.');
+        abort_unless($event->hasEnded(), 403, 'Sertifikat tersedia setelah event selesai.');
+        abort_unless($registration->hasAttended(), 403, 'Sertifikat hanya tersedia setelah presensi tercatat.');
 
         return $registration;
     }
