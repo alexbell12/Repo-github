@@ -14,11 +14,38 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .auth-panel {
-            background: linear-gradient(145deg, #312e81 0%, #4338ca 45%, #6366f1 100%);
+            background-color: #312e81;
+            background-image:
+                radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(145deg, #312e81 0%, #4338ca 45%, #6366f1 100%);
+            background-size: 24px 24px, 100% 100%;
+            color: #ffffff;
         }
-        .auth-pattern {
-            background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
-            background-size: 24px 24px;
+        .auth-panel .auth-brand-label {
+            color: #e0e7ff;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .auth-panel .auth-brand-title {
+            color: #ffffff;
+            font-size: clamp(1.75rem, 4vw, 2.25rem);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .auth-panel .auth-brand-desc {
+            color: #f1f5f9;
+            font-size: 1rem;
+            line-height: 1.65;
+        }
+        .auth-panel .auth-brand-list {
+            color: #f8fafc;
+            font-size: 0.875rem;
+        }
+        .auth-panel .auth-brand-footer {
+            color: #c7d2fe;
+            font-size: 0.75rem;
         }
         .form-input {
             width: 100%;
@@ -39,24 +66,24 @@
 <body class="min-h-screen bg-white text-gray-800 antialiased">
     <div class="min-h-screen flex flex-col lg:flex-row">
         {{-- Panel branding kiri --}}
-        <div class="auth-panel auth-pattern relative lg:w-[42%] xl:w-[45%] text-white flex flex-col justify-between p-8 lg:p-12 overflow-hidden">
+        <div class="auth-panel relative lg:w-[42%] xl:w-[45%] flex flex-col justify-between p-8 lg:p-12 overflow-hidden">
             <div class="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/5"></div>
             <div class="absolute bottom-10 -left-10 w-48 h-48 rounded-full bg-white/5"></div>
 
             <div class="relative z-10">
-                <a href="{{ route('events.index') }}" class="inline-flex items-center gap-2 font-semibold text-lg text-white/95 hover:text-white">
+                <a href="{{ route('events.index') }}" class="inline-flex items-center gap-2 font-semibold text-lg hover:opacity-90" style="color:#ffffff;">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
                     Presensi
                 </a>
             </div>
 
             <div class="relative z-10 my-10 lg:my-0">
-                <p class="text-indigo-200 text-sm font-medium uppercase tracking-wider mb-3">Fakultas Kedokteran</p>
-                <h1 class="text-3xl lg:text-4xl font-bold leading-tight mb-4">Universitas Riau</h1>
-                <p class="text-indigo-100 text-base lg:text-lg leading-relaxed max-w-sm">
+                <p class="auth-brand-label mb-3">Fakultas Kedokteran</p>
+                <h1 class="auth-brand-title mb-4">Universitas Riau</h1>
+                <p class="auth-brand-desc max-w-sm">
                     Sistem presensi digital berbasis QR code &amp; geolokasi untuk event seminar dan kegiatan kampus.
                 </p>
-                <ul class="mt-8 space-y-3 text-sm text-indigo-100">
+                <ul class="auth-brand-list mt-8 space-y-3">
                     <li class="flex items-center gap-3">
                         <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
@@ -78,7 +105,7 @@
                 </ul>
             </div>
 
-            <p class="relative z-10 text-indigo-200/80 text-xs hidden lg:block">
+            <p class="relative z-10 auth-brand-footer hidden lg:block">
                 © {{ date('Y') }} Presensi FK Universitas Riau
             </p>
         </div>
